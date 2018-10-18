@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETM.BusinessLogicLayer", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETM.DataAccessLayer", "ETM.DataAccessLayer\ETM.DataAccessLayer.csproj", "{5B4894E8-B4E9-40B3-B7C3-AD9945F2684B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETM.Shared", "ETM.Shared\ETM.Shared.csproj", "{203DEF74-A3FB-4843-A5AF-36CEB2EA1602}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5B4894E8-B4E9-40B3-B7C3-AD9945F2684B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B4894E8-B4E9-40B3-B7C3-AD9945F2684B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B4894E8-B4E9-40B3-B7C3-AD9945F2684B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{203DEF74-A3FB-4843-A5AF-36CEB2EA1602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{203DEF74-A3FB-4843-A5AF-36CEB2EA1602}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{203DEF74-A3FB-4843-A5AF-36CEB2EA1602}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{203DEF74-A3FB-4843-A5AF-36CEB2EA1602}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
