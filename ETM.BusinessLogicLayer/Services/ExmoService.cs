@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ETM.BusinessLogicLayer.Interfaces;
+using ETM.Shared.DTO;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -12,20 +14,30 @@ using System.Web;
 
 namespace ETM.BusinessLogicLayer.Services
 {
-    public class ExmoService
+    public class ExmoService : IStockExchange
     {
-            private static long _nounce;
-            // API settings
-            private string _key = " ";
-            private string _secret = " ";
-            private string _url = "http://api.exmo.com/v1/{0}";
+        private static long _nounce;
+        // API settings
+        private string _key = " ";
+        private string _secret = " ";
+        private string _url = "http://api.exmo.com/v1/{0}";
 
-            static ExmoService()
-            {
-                _nounce = Helpers.GetTimestamp();
-            }
+        static ExmoService()
+        {
+            _nounce = Helpers.GetTimestamp();
+        }
 
-            private async Task<string> ApiQueryAsync(string apiName, IDictionary<string, string> req)
+        public Task<UserInfo> GetUserInfoAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public UserInfo GetUserInfo()
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task<string> ApiQueryAsync(string apiName, IDictionary<string, string> req)
             {
                 using (var client = new HttpClient())
                 {
@@ -45,54 +57,53 @@ namespace ETM.BusinessLogicLayer.Services
                 }
             }
 
-            private string ApiQuery(string apiName, IDictionary<string, string> req)
+        private string ApiQuery(string apiName, IDictionary<string, string> req)
+        {
+            using (var wb = new WebClient())
             {
-                using (var wb = new WebClient())
-                {
-                    req.Add("nonce", Convert.ToString(_nounce++));
-                    var message = ToQueryString(req);
+                req.Add("nonce", Convert.ToString(_nounce++));
+                var message = ToQueryString(req);
 
-                    var sign = Sign(_secret, message);
+                var sign = Sign(_secret, message);
 
-                    wb.Headers.Add("Sign", sign);
-                    wb.Headers.Add("Key", _key);
+                wb.Headers.Add("Sign", sign);
+                wb.Headers.Add("Key", _key);
 
-                    var data = req.ToNameValueCollection();
+                var data = req.ToNameValueCollection();
 
-                    var response = wb.UploadValues(string.Format(_url, apiName), "POST", data);
-                    return Encoding.UTF8.GetString(response);
-                }
+                var response = wb.UploadValues(string.Format(_url, apiName), "POST", data);
+                return Encoding.UTF8.GetString(response);
             }
-
-            private string ToQueryString(IDictionary<string, string> dic)
-            {
-                var array = (from key in dic.Keys
-                             select string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(dic[key])))
-                    .ToArray();
-                return string.Join("&", array);
-            }
-
-            private static string Sign(string key, string message)
-            {
-                using (HMACSHA512 hmac = new HMACSHA512(Encoding.UTF8.GetBytes(key)))
-                {
-                    byte[] b = hmac.ComputeHash(Encoding.UTF8.GetBytes(message));
-                    return ByteToString(b);
-                }
-            }
-
-            private static string ByteToString(byte[] buff)
-            {
-                string sbinary = "";
-
-                for (int i = 0; i < buff.Length; i++)
-                {
-                    sbinary += buff[i].ToString("X2"); // hex format
-                }
-                return (sbinary).ToLowerInvariant();
-            }
-
         }
+
+        private string ToQueryString(IDictionary<string, string> dic)
+        {
+            var array = (from key in dic.Keys
+                            select string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(dic[key])))
+                .ToArray();
+            return string.Join("&", array);
+        }
+
+        private static string Sign(string key, string message)
+        {
+            using (HMACSHA512 hmac = new HMACSHA512(Encoding.UTF8.GetBytes(key)))
+            {
+                byte[] b = hmac.ComputeHash(Encoding.UTF8.GetBytes(message));
+                return ByteToString(b);
+            }
+        }
+
+        private static string ByteToString(byte[] buff)
+        {
+            string sbinary = "";
+
+            for (int i = 0; i < buff.Length; i++)
+            {
+                sbinary += buff[i].ToString("X2"); // hex format
+            }
+            return (sbinary).ToLowerInvariant();
+        }        
+    }
 
        public static class Helpers
         {
