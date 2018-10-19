@@ -1,8 +1,7 @@
 ﻿using ETM.BusinessLogicLayer.Interfaces;
 using ETM.Shared.DTO;
-using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ETM.BusinessLogicLayer.Services
@@ -10,13 +9,17 @@ namespace ETM.BusinessLogicLayer.Services
     public class ExmoService : BaseStockService, IStockExchange
     {
         public UserInfo GetUserInfo()
-        {
-          
+        {            
+            string result = ApiQuery("user_info", new Dictionary<string, string>());
+            UserInfo info = JsonConvert.DeserializeObject<UserInfo>(result);
+            return info;
         }
 
-        public Task<UserInfo> GetUserInfoAsync()
+        public async Task<UserInfo> GetUserInfoAsync()
         {
-            throw new NotImplementedException();
+            string result = await ApiQueryAsync("user_info", new Dictionary<string, string>());
+            UserInfo info = JsonConvert.DeserializeObject<UserInfo>(result);
+            return info;
         }
     }
 }
